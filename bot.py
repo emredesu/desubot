@@ -45,8 +45,10 @@ async def on_command_error(ctx, error):
 	if error in ignored_errors:
 		return
 	elif isinstance(error, discord.ext.commands.CommandInvokeError):
-		if "DoujinshiNotFound" in str(error):  # todo: fix this to be not scuffed, error.original and error.__cause__ return None; find out why
+		if "DoujinshiNotFound" in str(error):  # todo: fix these to be not scuffed, error.original and error.__cause__ return None; find out why
 			await ctx.send("No doujinshi with the given numbers were found. (╥﹏╥)")
+		elif "NothingFound" in str(error):
+			await ctx.send("Couldn't connect to the nekos.life API. (╥﹏╥)")
 		else:
 			print(error)
 	elif isinstance(error, discord.ext.commands.MissingRequiredArgument):
@@ -235,7 +237,7 @@ async def search_doujin(ctx, arg):
 			updated_embed.set_image(url=displaying.cover)
 			updated_embed.set_thumbnail(url=nhentai_logo)
 			updated_embed.add_field(name="Pages", value=displaying.pages)
-			updated_embed.add_field(name="Tags", value=displaying.tags)
+			updated_embed.add_field(name="Tags", value=", ".join(displaying.tags))
 			updated_embed.set_footer(text="Results: {}/{}".format(index, len(results)))
 			await sent.edit(embed=updated_embed)
 
@@ -473,5 +475,5 @@ async def commands(ctx):
 	await ctx.send(embed=embed)
 
 
-token = "veryvalidtokenverywowveryuwu"
+token = "I'mlisteningtothisrightnowhttps://youtu.be/JNOda5PFM8M"
 bot.run(token)
