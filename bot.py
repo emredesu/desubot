@@ -110,7 +110,8 @@ async def get_doujin(ctx, arg):
 		try:
 			reacted, user = await bot.wait_for("reaction_add", timeout=120.0, check=emoji_check_for_reading)
 		except asyncio.TimeoutError:
-			await ctx.send("Timeout, not expecting emojis anymore. (－ω－) zzZ")
+			for emoji in reactions:
+				await discord.Message.remove_reaction(sent, emoji=emoji, member=bot.user)
 		else:
 			if reacted.emoji == "📖":
 				for emoji in reactions:
@@ -150,7 +151,8 @@ async def get_doujin(ctx, arg):
 					try:
 						reaction, source = await bot.wait_for("reaction_add", timeout=120.0, check=emoji_check_during_reading)
 					except asyncio.TimeoutError:
-						await ctx.send("Timeout, not expecting emojis anymore. (－ω－) zzZ")
+						for emoji in valid_reactions:
+							await discord.Message.remove_reaction(sent, emoji=emoji, member=bot.user)
 						break
 					else:
 						reacted_emoji = reaction.emoji
@@ -247,7 +249,8 @@ async def search_doujin(ctx, arg):
 			try:
 				reacted, user = await bot.wait_for("reaction_add", timeout=120.0, check=emoji_check)
 			except asyncio.TimeoutError:
-				await ctx.send("Timeout, not expecting emojis anymore. (－ω－) zzZ")
+				for emoji in valid_reactions:
+					await discord.Message.remove_reaction(sent, emoji=emoji, member=bot.user)
 				break
 			else:
 				if reacted.emoji == "⬅":
@@ -346,7 +349,8 @@ async def nekos(ctx, arg1, arg2):
 				try:
 					reacted, user = await bot.wait_for("reaction_add", timeout=120.0, check=check)
 				except asyncio.TimeoutError:
-					await ctx.send("Timeout, not expecting emojis anymore. (－ω－) zzZ")
+					for emoji in reactions:
+						await discord.Message.remove_reaction(sent, emoji=emoji, member=bot.user)
 					break
 				else:
 					if reacted.emoji == "⏪":
@@ -420,7 +424,8 @@ async def rule34(ctx, arg):
 			try:
 				reacted, user = await bot.wait_for("reaction_add", timeout=120.0, check=check)
 			except asyncio.TimeoutError:
-				await ctx.send("Timeout, not expecting emojis anymore. (－ω－) zzZ")
+				for emoji in reactions:
+					await discord.Message.remove_reaction(sent, emoji=emoji, member=bot.user)
 				break
 			else:
 				if reacted.emoji == "⏪":
@@ -475,5 +480,5 @@ async def commands(ctx):
 	await ctx.send(embed=embed)
 
 
-token = "I'mlisteningtothisrightnowhttps://youtu.be/JNOda5PFM8M"
+token = ";-;"
 bot.run(token)
