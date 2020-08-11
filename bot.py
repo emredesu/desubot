@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from nh_module import *
-from datetime import datetime
+from datetime
 from nekos import img as nekosimg
 import random
 import re
