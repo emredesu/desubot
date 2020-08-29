@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from nh_module import *
-from datetime
+from datetime import datetime
 from nekos import img as nekosimg
 import random
 import re
@@ -12,13 +12,13 @@ bot = commands.Bot(command_prefix="~")
 start_time = datetime.now()
 
 
-def calculate_uptime(bot):
-	time_elapsed = (datetime.datetime.now() - start_time)
+def get_uptime():
+	time_elapsed = (datetime.now() - start_time).seconds
 
-	seconds = time_elapsed.seconds
+	seconds = time_elapsed
 	minutes = 0
 	hours = 0
-	days = time_elapsed.days
+	days = 0
 
 	if seconds >= 60:
 		minutes += seconds // 60
@@ -26,8 +26,11 @@ def calculate_uptime(bot):
 	if minutes >= 60:
 		hours += minutes // 60
 		minutes = minutes % 60
+	if hours >= 24:
+		days += hours // 24
+		hours = hours % 24
 
-	return "The bot has been running for {} days, {} hours, {} minutes and {} seconds! ^w^".format(days, hours, minutes, seconds)
+	return "The bot has been running for {} days, {} hours, {} minutes and {} seconds!".format(days, hours, minutes, seconds)
 
 
 @bot.event
@@ -196,17 +199,18 @@ async def random_doujin(ctx):
 
 @bot.command(aliases=["sd", "sh"])
 async def search_doujin(ctx, arg):
-	results = search_for_doujin(arg)
+	results = nhentai.search(arg)
 	nhentai_logo = "https://i.imgur.com/uLAimaY.png"
 
 	if len(results) == 0:
 		await ctx.send("No results with the search term were found. Note that you need to search with \"\" to search for multiple words. For example: ~search_doujin \"maki nico\" __φ(．．)")
 	else:
 		first_result = results[0]
-		name = first_result.name
-		tags = first_result.tags
-		page_count = first_result.pages
-		doujin_cover = first_result.cover
+		data = get_doujin_data(first_result.id)
+		name = data["name"]
+		tags = data["tags"]
+		page_count = data["page_count"]
+		doujin_cover = data["cover"]
 
 		doujin_embed = discord.Embed(title=name, type="rich", colour=discord.Colour.from_rgb(255, 255, 0))
 		doujin_embed.set_image(url=doujin_cover)
@@ -232,11 +236,13 @@ async def search_doujin(ctx, arg):
 			return source != bot.user and str(reaction.emoji) in valid_reactions
 
 		async def update_embed(displaying, index):
-			updated_embed = discord.Embed(title=displaying.name, type="rich", colour=discord.Colour.from_rgb(255, 255, 0))
-			updated_embed.set_image(url=displaying.cover)
+			new_data = get_doujin_data(displaying.id)
+
+			updated_embed = discord.Embed(title=new_data["name"], type="rich", colour=discord.Colour.from_rgb(255, 255, 0))
+			updated_embed.set_image(url=new_data["cover"])
 			updated_embed.set_thumbnail(url=nhentai_logo)
-			updated_embed.add_field(name="Pages", value=displaying.pages)
-			updated_embed.add_field(name="Tags", value=", ".join(displaying.tags))
+			updated_embed.add_field(name="Pages", value=new_data["page_count"])
+			updated_embed.add_field(name="Tags", value=", ".join(new_data["tags"]))
 			updated_embed.set_footer(text="Results: {}/{}".format(index, len(results)))
 			await sent.edit(embed=updated_embed)
 
@@ -267,7 +273,7 @@ async def search_doujin(ctx, arg):
 					else:
 						await update_embed(results[current_doujin], current_doujin + 1)
 				elif reacted.emoji == "📖":
-					await get_doujin(ctx, results[current_doujin].magic)
+					await get_doujin(ctx, results[current_doujin].id)
 					break
 				elif reacted.emoji == "❌":
 					await discord.Message.delete(sent)
@@ -477,5 +483,5 @@ async def commands(ctx):
 	await ctx.send(embed=embed)
 
 
-token = ";-;"
+token = "stillmissyoualot"
 bot.run(token)
