@@ -15,9 +15,7 @@ def search_doujins(args):
 
 	return ids
 
-def get_random_doujin(): # doesn't work (obviously)
-	request = requests.get("https://nhentai.net/random")
-	result = re.search("https://nhentai.net/g/(.*)/", request.url)
-	magic_numbers = result.group(1)
 
-	return magic_numbers
+def get_random_doujin():
+	return int(requests.get("https://imgproxy.ivr.ovh/nhrandom").json()["random"])
+

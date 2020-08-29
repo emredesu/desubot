@@ -193,7 +193,7 @@ async def doujin_info(ctx, arg):
 
 @bot.command(aliases=["rd", "rh"])
 async def random_doujin(ctx):
-	await ctx.send("that command won't work on a proxied version of the bot, sorry ;w;")
+	await get_doujin(ctx, get_random_doujin())
 
 
 @bot.command(aliases=["sd", "sh"])
