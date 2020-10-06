@@ -2,7 +2,5 @@ discord.py == 1.4.1
 nekos.py == 1.0.2
 nhentai.py == 2.1.0
 rule34 == 1.6.0
-beautifulsoup4 == 4.6.0
-lxml==4.3.2
 asyncio~=3.4.3
 requests~=2.24.0
