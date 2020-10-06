@@ -482,5 +482,5 @@ async def commands(ctx):
 	await ctx.send(embed=embed)
 
 
-token = "NTQzMDM5NjE2NzQ4NDg2NjU3.XlDw-g.vmarZ6Sqqh4Hd4dla2yDPf58CO8"
+token = "ehehe"
 bot.run(token)
