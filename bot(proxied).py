@@ -272,7 +272,7 @@ async def search_doujin(ctx, arg):
 					else:
 						await update_embed(results[current_doujin], current_doujin + 1)
 				elif reacted.emoji == "📖":
-					await get_doujin(ctx, results[current_doujin].id)
+					await get_doujin(ctx, results[current_doujin])
 					break
 				elif reacted.emoji == "❌":
 					await discord.Message.delete(sent)
@@ -482,5 +482,5 @@ async def commands(ctx):
 	await ctx.send(embed=embed)
 
 
-token = ";-;"
+token = "NTQzMDM5NjE2NzQ4NDg2NjU3.XlDw-g.vmarZ6Sqqh4Hd4dla2yDPf58CO8"
 bot.run(token)
